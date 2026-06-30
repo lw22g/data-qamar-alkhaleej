@@ -100,7 +100,7 @@ function renderTabs(sheets) {
     });
 }
 
-// دالة تعبئة وعرض البيانات في الجدول
+// دالة تعبئة وعرض البيانات في الجدول (المحدثة لدمج الخلايا)
 function renderTable(filterText = '') {
     const thead = document.getElementById('table-head');
     const tbody = document.getElementById('tours-body');
@@ -111,10 +111,10 @@ function renderTable(filterText = '') {
     const searchLower = filterText.toLowerCase().trim();
     const sheetData = allData[currentSheet] || [];
     
-    // فحص بنية الشيت لمعرفة ما إذا كانت تحتوي على اسم فندق ثانٍ (6 أعمدة)
+    // فحص بنية الشيت لمعرفة ما إذا كانت تحتوي على اسم فندق ثانٍ
     const hasTwoHotels = sheetData.some(row => row.hasTwoHotels === true);
 
-    // إنشاء رأس الجدول بناءً على عدد الفنادق مع تثبيته
+    // --- إنشاء رأس الجدول ---
     const headerRow = document.createElement('tr');
     headerRow.className = "bg-brand-900 text-white text-base font-bold border-b border-brand-950";
     
@@ -138,78 +138,103 @@ function renderTable(filterText = '') {
     }
     thead.appendChild(headerRow);
     
-    let matchedCount = 0;
+    // --- تجميع البيانات (لدمج الخلايا rowspan) ---
+    let groups = [];
+    let currentGroup = null;
 
     sheetData.forEach(row => {
-        const hotel = row.hotel || "-";
-        const hotel2 = row.hotel2 || "";
-        const days = row.days || "-";
-        const adult = row.adultPrice || "-";
-        const child = row.childPrice || "-";
-        const notes = row.notes || "-";
-
-        // فحص الفلترة والبحث
-        if (hotel.toLowerCase().includes(searchLower) || 
-            hotel2.toLowerCase().includes(searchLower) || 
-            notes.toLowerCase().includes(searchLower)) {
-            
-            matchedCount++;
-
-            const tr = document.createElement('tr');
-            tr.className = "hover:bg-brand-50/15 even:bg-slate-100/70 odd:bg-white transition-colors duration-150 border-b border-slate-200/60";
-            
-            if (hasTwoHotels) {
-                tr.innerHTML = `
-                    <!-- Hotel Name 1 -->
-                    <td class="px-6 py-5 text-center align-middle border border-slate-250 font-extrabold text-slate-900 text-lg leading-snug">
-                        ${hotel}
-                    </td>
-                    <!-- Hotel Name 2 -->
-                    <td class="px-6 py-5 text-center align-middle border border-slate-250 font-extrabold text-slate-900 text-lg leading-snug">
-                        ${hotel2 || "-"}
-                    </td>
-                    <!-- Duration -->
-                    <td class="px-6 py-5 text-center align-middle border border-slate-250 font-bold text-slate-700 text-base">
-                        ${days}
-                    </td>
-                    <!-- Adult Price -->
-                    <td class="px-6 py-5 text-center align-middle border border-slate-250 font-black text-brand-900 text-lg">
-                        ${adult}
-                    </td>
-                    <!-- Child Price -->
-                    <td class="px-6 py-5 text-center align-middle border border-slate-250 font-extrabold text-amber-800 text-base">
-                        ${child}
-                    </td>
-                    <!-- Details & Notes -->
-                    <td class="px-6 py-5 text-center align-middle border border-slate-250 text-slate-700 text-base whitespace-pre-line leading-relaxed max-w-xl">
-                        ${notes}
-                    </td>
-                 `;
-            } else {
-                tr.innerHTML = `
-                    <!-- Hotel Name -->
-                    <td class="px-6 py-5 text-center align-middle border border-slate-250 font-extrabold text-slate-900 text-lg leading-snug">
-                        ${hotel}
-                    </td>
-                    <!-- Duration -->
-                    <td class="px-6 py-5 text-center align-middle border border-slate-250 font-bold text-slate-700 text-base">
-                        ${days}
-                    </td>
-                    <!-- Adult Price -->
-                    <td class="px-6 py-5 text-center align-middle border border-slate-250 font-black text-brand-900 text-lg">
-                        ${adult}
-                    </td>
-                    <!-- Child Price -->
-                    <td class="px-6 py-5 text-center align-middle border border-slate-250 font-extrabold text-amber-800 text-base">
-                        ${child}
-                    </td>
-                    <!-- Details & Notes -->
-                    <td class="px-6 py-5 text-center align-middle border border-slate-250 text-slate-700 text-base whitespace-pre-line leading-relaxed max-w-xl">
-                        ${notes}
-                    </td>
-                `;
+        const hotelName = (row.hotel || "").toString().trim();
+        
+        let isNewGroup = false;
+        if (!currentGroup) {
+            isNewGroup = true;
+        } else {
+            // نعتبره فندق جديد إذا كان الاسم موجود ويختلف عن الفندق الحالي ومو فارغ
+            if (hotelName && hotelName !== "-" && hotelName !== currentGroup.hotel) {
+                isNewGroup = true;
             }
-            tbody.appendChild(tr);
+        }
+
+        if (isNewGroup) {
+            currentGroup = {
+                hotel: hotelName,
+                hotel2: (row.hotel2 || "").toString().trim(),
+                notes: (row.notes || "").toString().trim(),
+                rows: []
+            };
+            groups.push(currentGroup);
+        }
+        
+        // إضافة تفاصيل الأيام والأسعار للمجموعة الحالية
+        currentGroup.rows.push({
+            days: (row.days || "-").toString().trim(),
+            adultPrice: (row.adultPrice || "-").toString().trim(),
+            childPrice: (row.childPrice || "-").toString().trim()
+        });
+    });
+
+    let matchedCount = 0;
+
+    // --- فلترة وعرض البيانات ---
+    groups.forEach((g) => {
+        // فحص البحث (نبحث باسم الفندق، الملاحظات، أو أي من الأسعار والأيام)
+        let textToSearch = [g.hotel, g.hotel2, g.notes].join(" ").toLowerCase();
+        let matchFound = textToSearch.includes(searchLower);
+        
+        if (!matchFound) {
+            for (let r of g.rows) {
+                let rowText = [r.days, r.adultPrice, r.childPrice].join(" ").toLowerCase();
+                if (rowText.includes(searchLower)) {
+                    matchFound = true;
+                    break;
+                }
+            }
+        }
+
+        if (matchFound) {
+            matchedCount++;
+            const rowspan = g.rows.length;
+            
+            // تحديد لون للمجموعة حتى تترتب بصرياً
+            const bgClass = matchedCount % 2 === 0 ? 'bg-slate-50/60' : 'bg-white';
+
+            g.rows.forEach((r, index) => {
+                const tr = document.createElement('tr');
+                tr.className = `hover:bg-brand-50/30 transition-colors duration-150 ${bgClass}`;
+                
+                // إضافة حدود سفلية قوية بنهاية كل فندق
+                if (index === rowspan - 1) {
+                    tr.classList.add('border-b-2', 'border-slate-300');
+                } else {
+                    tr.classList.add('border-b', 'border-slate-200', 'border-dashed');
+                }
+
+                let html = "";
+                
+                // الخلايا المدموجة (اسم الفندق) تظهر بس بأول سطر
+                if (index === 0) {
+                    html += `<td rowspan="${rowspan}" class="px-6 py-5 text-center align-middle border border-slate-300 font-extrabold text-slate-900 text-lg leading-snug bg-white shadow-sm">${g.hotel || "-"}</td>`;
+                    
+                    if (hasTwoHotels) {
+                        html += `<td rowspan="${rowspan}" class="px-6 py-5 text-center align-middle border border-slate-300 font-extrabold text-slate-900 text-lg leading-snug bg-white shadow-sm">${g.hotel2 || "-"}</td>`;
+                    }
+                }
+                
+                // الخلايا المتغيرة (الأيام والأسعار)
+                html += `
+                    <td class="px-6 py-4 text-center align-middle border-x border-slate-200 font-bold text-brand-700 text-base">${r.days}</td>
+                    <td class="px-6 py-4 text-center align-middle border-x border-slate-200 font-black text-slate-800 text-lg">${r.adultPrice}</td>
+                    <td class="px-6 py-4 text-center align-middle border-x border-slate-200 font-extrabold text-amber-600 text-base">${r.childPrice}</td>
+                `;
+                
+                // عمود الملاحظات المدموج
+                if (index === 0) {
+                    html += `<td rowspan="${rowspan}" class="px-6 py-5 text-center align-middle border border-slate-300 text-slate-700 text-base whitespace-pre-line leading-relaxed max-w-xl bg-white shadow-sm">${g.notes || "-"}</td>`;
+                }
+                
+                tr.innerHTML = html;
+                tbody.appendChild(tr);
+            });
         }
     });
 
