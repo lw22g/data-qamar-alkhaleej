@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>قمر الخليج للسفر والسياحة - العروض المباشرة</title>
+    <title>قمر الخليج للسفر والسياحة - العروض المباشرة والبرامج السياحية</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Google Fonts - Tajawal -->
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
     
     <!-- Tailwind Custom Configuration -->
     <script>
@@ -20,15 +20,29 @@
                         brand: {
                             50: '#f0fdf4',
                             100: '#dcfce7',
+                            200: '#bbf7d0',
                             500: '#10b981',
                             600: '#059669',
+                            700: '#047857',
                             800: '#065f46',
-                            900: '#064e3b', /* الأخضر الملكي الغامق */
+                            900: '#064e3b',
                             950: '#022c1e',
+                        },
+                        gold: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
                         }
                     },
                     fontFamily: {
                         sans: ['Tajawal', 'sans-serif']
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'card': '0 10px 30px -4px rgba(6, 78, 59, 0.06), 0 4px 6px -2px rgba(0, 0, 0, 0.02)',
+                        'glow': '0 0 20px rgba(16, 185, 129, 0.25)',
                     }
                 }
             }
@@ -38,115 +52,325 @@
     <!-- Custom CSS Styles -->
     <link rel="stylesheet" href="styles.css">
 </head>
-<body class="text-slate-700 antialiased min-h-screen flex flex-col bg-slate-50/50">
+<body class="text-slate-800 antialiased min-h-screen flex flex-col selection:bg-emerald-500 selection:text-white">
+
+    <!-- Print Header (Hidden on screen, visible on print) -->
+    <div class="hidden print-header p-6 border-b border-slate-300 text-center mb-6">
+        <h1 class="text-2xl font-bold text-slate-900">شركة قمر الخليج للسفر والسياحة</h1>
+        <p class="text-sm text-slate-600 mt-1" id="print-destination-title">دليل الأسعار والعروض السياحية المباشرة</p>
+        <p class="text-xs text-slate-400 mt-1" id="print-date"></p>
+    </div>
 
     <!-- Header Section -->
-    <header class="bg-gradient-to-r from-brand-950 via-brand-900 to-brand-950 text-white shadow-md relative overflow-hidden">
-        <!-- Background accents -->
-        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
-        <div class="absolute -left-16 -top-16 w-32 h-32 bg-emerald-500 rounded-full blur-2xl opacity-15"></div>
-        <div class="absolute -right-16 -bottom-16 w-32 h-32 bg-emerald-500 rounded-full blur-2xl opacity-15"></div>
+    <header class="bg-gradient-to-r from-brand-950 via-brand-900 to-brand-950 text-white shadow-lg relative overflow-hidden border-b border-emerald-800/40">
+        <!-- Background Ambient Accents -->
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-emerald-500/10 via-transparent to-transparent pointer-events-none"></div>
+        <div class="absolute -left-20 -top-20 w-52 h-52 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -right-20 -bottom-20 w-52 h-52 bg-emerald-400/10 rounded-full blur-3xl pointer-events-none"></div>
         
-        <div class="w-[96%] max-w-7xl mx-auto py-5 flex flex-col sm:flex-row justify-between items-center gap-4 relative z-10">
-            <div class="flex items-center gap-3.5">
-                <div class="p-2.5 bg-white/10 rounded-xl border border-white/15 shadow-inner">
-                    <svg class="h-6 w-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <div class="w-[94%] max-w-7xl mx-auto py-5 flex flex-col md:flex-row justify-between items-center gap-4 relative z-10">
+            <!-- Brand Logo & Title -->
+            <div class="flex items-center gap-4 text-right">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-400 to-brand-700 flex items-center justify-center shadow-glow border border-white/20 p-2.5">
+                    <svg class="w-full h-full text-white drop-shadow" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                     </svg>
                 </div>
                 <div>
-                    <h1 class="text-xl md:text-2xl font-bold tracking-wide text-white">شركة قمر الخليج للسفر والسياحة</h1>
-                    <p class="text-emerald-300/80 font-medium text-xs md:text-sm mt-0.5">العروض المباشرة والبرامج السياحية المميزة</p>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-xl md:text-2xl font-black tracking-tight text-white">شركة قمر الخليج للسفر والسياحة</h1>
+                        <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30">VIP</span>
+                    </div>
+                    <p class="text-emerald-200/80 font-medium text-xs md:text-sm mt-0.5">منظومة العروض المباشرة والبرامج السياحية المتكاملة</p>
                 </div>
             </div>
-            <div class="flex items-center gap-2 text-xs bg-white/5 border border-white/10 px-3 py-1.5 rounded-full text-emerald-200 shadow-inner">
-                <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                تحديث تلقائي مستمر
+
+            <!-- Quick Action Tools in Header -->
+            <div class="flex items-center gap-2.5">
+                <!-- Sync Indicator -->
+                <div class="flex items-center gap-2 text-xs bg-white/10 backdrop-blur-md border border-white/15 px-3.5 py-2 rounded-xl text-emerald-100 shadow-inner">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+                    </span>
+                    <span class="font-medium text-[11px] md:text-xs">تحديث مباشر للأسعار</span>
+                </div>
+
+                <!-- Print Action Button -->
+                <button onclick="window.print()" title="طباعة العروض" class="p-2 bg-white/10 hover:bg-white/20 text-white rounded-xl border border-white/15 transition-all flex items-center justify-center">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                    </svg>
+                </button>
+
+                <!-- Refresh Data Button -->
+                <button onclick="refreshData()" title="إعادة تحميل البيانات" class="p-2 bg-white/10 hover:bg-white/20 text-white rounded-xl border border-white/15 transition-all flex items-center justify-center">
+                    <svg id="refresh-icon" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                </button>
             </div>
         </div>
     </header>
 
-    <!-- Main Section -->
-    <main class="w-[96%] max-w-7xl mx-auto py-6 flex-1 flex flex-col">
+    <!-- Main Content Section -->
+    <main class="w-[94%] max-w-7xl mx-auto py-6 flex-1 flex flex-col">
         
-        <!-- Search & Control Panel -->
-        <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm mb-6 flex flex-col gap-4">
-            <!-- Search input -->
-            <div class="relative flex items-center bg-slate-50 border border-slate-200 rounded-xl focus-within:border-emerald-600 focus-within:ring-1 focus-within:ring-emerald-600 transition-all">
-                <span class="pr-4 pl-2 text-slate-400">
-                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        <!-- Control Panel (Search, Tabs & Filters) -->
+        <div id="search-and-filters" class="bg-white rounded-3xl border border-slate-200/80 p-4 md:p-5 shadow-soft mb-6 flex flex-col gap-4">
+            
+            <!-- Search & Mode Switcher Row -->
+            <div class="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+                <!-- Search Bar -->
+                <div class="relative flex-1 flex items-center bg-slate-50 border border-slate-200 rounded-2xl focus-within:border-emerald-600 focus-within:ring-2 focus-within:ring-emerald-500/20 focus-within:bg-white transition-all shadow-sm">
+                    <span class="pr-4 pl-2 text-slate-400">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </span>
+                    <input type="text" id="search-input" placeholder="ابحث باسم الفندق، الوجهة، الشموليات، أو الأسعار..." 
+                        class="w-full bg-transparent border-none pr-2 pl-3 py-3 text-slate-800 placeholder-slate-400 focus:outline-none text-sm md:text-base font-medium">
+                    <button id="clear-search-btn" onclick="clearSearch()" class="hidden pl-4 pr-2 text-slate-400 hover:text-slate-600 transition-colors">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Display Mode Toggle (Cards vs Table) -->
+                <div class="flex items-center bg-slate-100 p-1 rounded-2xl border border-slate-200 shadow-inner self-start md:self-auto">
+                    <button id="btn-view-cards" onclick="setViewMode('cards')" class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs md:text-sm font-bold transition-all bg-white text-emerald-900 shadow-sm">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                        </svg>
+                        <span>بطاقات أنيقة</span>
+                    </button>
+                    <button id="btn-view-table" onclick="setViewMode('table')" class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs md:text-sm font-bold transition-all text-slate-600 hover:text-slate-900">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                        <span>جدول متطور</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Destinations Tabs -->
+            <div class="flex flex-col gap-2 pt-2 border-t border-slate-100" id="destinations-section">
+                <div id="dest-nav-header" class="flex items-center justify-between flex-wrap gap-2">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        اختر الوجهة السياحية
+                    </span>
+                    <!-- Share Destination Direct Link Button -->
+                    <button onclick="copyCurrentDestinationLink()" class="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200/80 rounded-xl text-xs font-bold transition-all shadow-2xs hover:scale-[1.02]" title="نسخ رابط مباشر خاص بهذه الوجهة فقط لمشاركته">
+                        <svg class="w-3.5 h-3.5 text-emerald-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                        </svg>
+                        <span>مشاركة رابط هذه الدولة 🔗</span>
+                    </button>
+                </div>
+                <!-- Single Destination Alert Banner (Shown when opened via shared direct link) -->
+                <div id="single-dest-banner" class="hidden bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 border border-emerald-200/90 text-emerald-950 px-4 py-3 rounded-2xl flex items-center justify-between text-xs md:text-sm font-bold shadow-2xs">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-7 h-7 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
+                            📍
+                        </div>
+                        <div>
+                            <span class="text-slate-500 text-xs block font-medium">البرامج والعروض المباشرة لوجهة:</span>
+                            <span id="single-dest-name" class="text-emerald-900 font-black text-sm md:text-base"></span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-emerald-100 text-emerald-800 text-xs font-black shadow-2xs">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span>عرض مخصص</span>
+                    </div>
+                </div>
+
+                <div id="tabs-container" class="flex gap-2 overflow-x-auto pb-1.5 custom-scrollbar">
+                    <!-- Dynamic Tabs Rendered via JS -->
+                </div>
+            </div>
+
+            <!-- Filter Pills & Sorting Options -->
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 text-xs">
+                <!-- Quick Filter Tags -->
+                <div class="flex flex-wrap items-center gap-1.5">
+                    <span class="text-slate-400 font-bold ml-1">تصفية:</span>
+                    <button id="filter-all" onclick="setQuickFilter('all')" class="px-3 py-1.5 rounded-xl font-bold transition-all bg-emerald-800 text-white shadow-xs">
+                        الكل
+                    </button>
+                    <button id="filter-special" onclick="setQuickFilter('special')" class="px-3 py-1.5 rounded-xl font-bold transition-all bg-slate-100 text-slate-600 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 border border-transparent flex items-center gap-1">
+                        <span>🔥 عروض خاصة فقط</span>
+                        <span id="special-badge-count" class="bg-rose-500 text-white text-[10px] px-1.5 py-0.2 rounded-full hidden">0</span>
+                    </button>
+                </div>
+
+                <!-- Sorting Dropdown -->
+                <div class="flex items-center gap-2">
+                    <span class="text-slate-400 font-bold">ترتيب حسب:</span>
+                    <select id="sort-select" onchange="handleSortChange(this.value)" class="bg-slate-50 border border-slate-200 text-slate-700 font-bold rounded-xl px-3 py-1.5 focus:outline-none focus:border-emerald-600 text-xs cursor-pointer">
+                        <option value="default">الترتيب الأصلي</option>
+                        <option value="price-asc">السعر: من الأقل للأعلى</option>
+                        <option value="price-desc">السعر: من الأعلى للأقل</option>
+                        <option value="name-asc">اسم الفندق (أ - ي)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats Banner -->
+        <div id="stats-banner" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-6">
+            <!-- Stat 1: Total Hotels -->
+            <div class="bg-white rounded-2xl p-3.5 border border-slate-200/80 shadow-xs flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 border border-emerald-100">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                     </svg>
-                </span>
-                <input type="text" id="search-input" placeholder="ابحث باسم الفندق، الوجهة، أو أي تفاصيل..." 
-                    class="w-full bg-transparent border-none pr-2 pl-4 py-3.5 text-slate-800 placeholder-slate-400 focus:outline-none text-base font-medium">
+                </div>
+                <div>
+                    <span class="text-[11px] font-bold text-slate-400 block">إجمالي البرامج</span>
+                    <span id="stat-total-count" class="text-base font-black text-slate-800">0 برنامج</span>
+                </div>
             </div>
 
-            <!-- Tabs Section -->
-            <div class="flex flex-col gap-2">
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">الوجهات المتاحة</span>
-                <div id="tabs-container" class="flex gap-2 overflow-x-auto pb-2 custom-scrollbar"></div>
+            <!-- Stat 2: Starting Price -->
+            <div class="bg-white rounded-2xl p-3.5 border border-slate-200/80 shadow-xs flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center shrink-0 border border-amber-100">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <span class="text-[11px] font-bold text-slate-400 block">يبدأ السعر من</span>
+                    <span id="stat-min-price" class="text-base font-black text-emerald-700">-</span>
+                </div>
+            </div>
+
+            <!-- Stat 3: Special Offers -->
+            <div class="bg-white rounded-2xl p-3.5 border border-slate-200/80 shadow-xs flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0 border border-rose-100">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+                    </svg>
+                </div>
+                <div>
+                    <span class="text-[11px] font-bold text-slate-400 block">عروض مميزة</span>
+                    <span id="stat-special-count" class="text-base font-black text-rose-600">0 عرض</span>
+                </div>
+            </div>
+
+            <!-- Stat 4: Destination Badge -->
+            <div class="bg-white rounded-2xl p-3.5 border border-slate-200/80 shadow-xs flex items-center gap-3 col-span-2 sm:col-span-1">
+                <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center shrink-0 border border-blue-100">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <span class="text-[11px] font-bold text-slate-400 block">الوجهة الحالية</span>
+                    <span id="stat-active-sheet" class="text-base font-black text-slate-800">-</span>
+                </div>
             </div>
         </div>
 
-        <!-- Loader -->
-        <div id="loader" class="py-20 text-center flex flex-col items-center justify-center gap-4">
-            <div class="w-10 h-10 border-4 border-slate-100 border-t-emerald-800 rounded-full animate-spin"></div>
-            <span class="text-emerald-800 font-bold text-base">جاري تحميل العروض...</span>
+        <!-- Skeleton Shimmer Loader -->
+        <div id="skeleton-loader" class="flex flex-col gap-4 py-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-white rounded-3xl p-6 border border-slate-200 skeleton-shimmer h-64"></div>
+                <div class="bg-white rounded-3xl p-6 border border-slate-200 skeleton-shimmer h-64"></div>
+            </div>
         </div>
 
-        <!-- No Data -->
-        <div id="no-data-state" class="hidden py-20 text-center flex flex-col items-center justify-center gap-3">
-            <div class="p-4 bg-slate-50 text-slate-400 rounded-full border border-slate-100">
-                <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+        <!-- No Data State -->
+        <div id="no-data-state" class="hidden py-16 text-center flex flex-col items-center justify-center gap-4 bg-white rounded-3xl border border-slate-200 p-8 shadow-xs">
+            <div class="w-16 h-16 bg-slate-50 text-slate-400 rounded-3xl flex items-center justify-center border border-slate-100 shadow-inner">
+                <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
             </div>
-            <h3 class="text-slate-700 font-bold text-lg">لا توجد نتائج مطابقة لبحثك</h3>
-            <p class="text-slate-400 text-xs">يرجى التأكد من كتابة الاسم بشكل صحيح أو المحاولة بكلمة بحث أخرى</p>
+            <div>
+                <h3 class="text-slate-800 font-bold text-lg">لا توجد نتائج مطابقة لبحثك</h3>
+                <p class="text-slate-400 text-xs md:text-sm mt-1 max-w-md mx-auto">تأكد من كتابة الكلمات بشكل صحيح، أو أزل الفلاتر المطبقة لعرض جميع البرامج المتاحة.</p>
+            </div>
+            <button onclick="resetAllFilters()" class="px-5 py-2.5 bg-emerald-800 hover:bg-emerald-900 text-white rounded-xl font-bold text-xs shadow-md transition-all">
+                عرض جميع العروض
+            </button>
         </div>
 
-        <!-- Table Container -->
+        <!-- Data Content Views -->
         <div id="data-container" class="hidden flex-1">
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="overflow-x-auto custom-scrollbar w-full max-h-[70vh]" style="-webkit-overflow-scrolling: touch;">
-                    <table class="pro-table min-w-[1000px] md:min-w-[1200px]">
-                        <thead id="table-head"></thead>
-                        <tbody id="tours-body" class="bg-white"></tbody>
-                    </table>
+            
+            <!-- Cards View Mode -->
+            <div id="cards-view" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <!-- Dynamically Rendered Hotel Cards -->
+            </div>
+
+            <!-- Table View Mode -->
+            <div id="table-view" class="hidden">
+                <div class="bg-white rounded-3xl shadow-card border border-slate-200/90 overflow-hidden">
+                    <div class="overflow-x-auto custom-scrollbar w-full max-h-[75vh]" style="-webkit-overflow-scrolling: touch;">
+                        <table class="pro-table min-w-[1000px] md:min-w-[1200px]">
+                            <thead id="table-head"></thead>
+                            <tbody id="tours-body" class="bg-white"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- Scroll Tip for Mobile/Tablets -->
+                <div class="mt-3 flex items-center justify-center gap-2 text-xs text-slate-400 md:hidden">
+                    <svg class="w-4 h-4 animate-bounce text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                    <span>مرر الجدول أفقياً للاطلاع على كامل الأسعار والشمولية</span>
                 </div>
             </div>
-            <!-- Scroll Tip -->
-            <div class="mt-3 flex items-center justify-center gap-2 text-xs text-slate-400 md:hidden">
-                <svg class="w-4 h-4 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-                <span>اسحب الجدول لليمين أو اليسار لعرض باقي التفاصيل</span>
-            </div>
+
         </div>
     </main>
 
+    <!-- Floating Toast Message (For Copy/Actions) -->
+    <div id="toast" class="toast-msg bg-slate-900/95 backdrop-blur-md text-white border border-slate-700 px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 text-xs md:text-sm font-bold">
+        <svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+        <span id="toast-text">تم نسخ تفاصيل العرض بنجاح!</span>
+    </div>
+
+    <!-- Floating WhatsApp Support Button -->
+    <a href="https://wa.me/9647744005595?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D9%88%D8%AF%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%A7%D9%84%D8%B9%D8%B1%D9%88%D8%B6%20%D8%A7%D9%84%D8%B3%D9%8A%D8%A7%D8%AD%D9%8A%D8%A9" 
+       target="_blank" 
+       rel="noopener noreferrer" 
+       title="تواصل معنا عبر واتساب"
+       class="fixed bottom-6 right-6 z-40 bg-gradient-to-tr from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white p-3.5 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 flex items-center gap-2.5 border border-white/20">
+        <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.963C16.388 2.016 13.91 1.018 11.28 1.018c-5.438 0-9.863 4.373-9.868 9.802-.001 1.777.475 3.51 1.378 5.042l-1.018 3.714 3.847-.998c1.554.851 3.238 1.3 4.939 1.3.003 0 .003 0 0 0zm9.957-6.864c-.26-.13-1.532-.756-1.77-.84-.237-.085-.41-.13-.58.13-.172.26-.667.84-.818 1.01-.15.17-.3.19-.56.06-2.185-1.097-3.606-2.029-4.707-3.918-.29-.497.29-.462.83-1.536.09-.18.04-.34-.02-.47-.06-.13-.58-1.398-.795-1.92-.21-.505-.42-.435-.58-.443-.15-.007-.32-.009-.49-.009-.17 0-.45.064-.68.322-.23.258-.88.86-.88 2.1 0 1.24.9 2.438 1.02 2.6.12.16 1.77 2.7 4.29 3.79.6.26 1.07.415 1.43.53.6.19 1.15.165 1.58.1.48-.07 1.53-.625 1.74-1.23.21-.6.21-1.12.15-1.23-.06-.11-.22-.17-.48-.3z"/>
+        </svg>
+        <span class="hidden sm:inline font-bold text-xs">استفسار وحجز سريع</span>
+    </a>
+
     <!-- Footer Section -->
-    <footer class="bg-slate-900 text-slate-400 text-xs py-6 border-t border-slate-800 mt-auto">
-        <div class="w-[96%] max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div>
-                <p class="font-semibold text-slate-300">شركة قمر الخليج للسفر والسياحة © 2026</p>
-                <p class="mt-1">جميع الحقوق محفوظة. الأسعار والعروض خاضعة للتغيير والتحديث المستمر.</p>
+    <footer class="bg-slate-950 text-slate-400 text-xs py-8 border-t border-slate-800/80 mt-auto">
+        <div class="w-[94%] max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-6">
+            <div class="text-center sm:text-right">
+                <div class="flex items-center justify-center sm:justify-start gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                    <p class="font-bold text-slate-200 text-sm">شركة قمر الخليج للسفر والسياحة © 2026</p>
+                </div>
+                <p class="mt-1 text-slate-500 text-[11px]">نظام العروض الذكي - جميع الأسعار تخضع لتوافر المقاعد والغرف الفندقية.</p>
             </div>
-            <div class="flex gap-4">
-                <span class="hover:text-white transition-colors cursor-pointer">الشروط والأحكام</span>
-                <span class="text-slate-700">|</span>
-                <a href="https://wa.me/9647744005595" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors cursor-pointer flex items-center gap-1.5">
-                    <svg class="w-3.5 h-3.5 text-emerald-500 fill-current" viewBox="0 0 24 24">
-                        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.963C16.388 2.016 13.91 1.018 11.28 1.018c-5.438 0-9.863 4.373-9.868 9.802-.001 1.777.475 3.51 1.378 5.042l-1.018 3.714 3.847-.998c1.554.851 3.238 1.3 4.939 1.3.003 0 .003 0 0 0zm9.957-6.864c-.26-.13-1.532-.756-1.77-.84-.237-.085-.41-.13-.58.13-.172.26-.667.84-.818 1.01-.15.17-.3.19-.56.06-2.185-1.097-3.606-2.029-4.707-3.918-.29-.497.29-.462.83-1.536.09-.18.04-.34-.02-.47-.06-.13-.58-1.398-.795-1.92-.21-.505-.42-.435-.58-.443-.15-.007-.32-.009-.49-.009-.17 0-.45.064-.68.322-.23.258-.88.86-.88 2.1 0 1.24.9 2.438 1.02 2.6.12.16 1.77 2.7 4.29 3.79.6.26 1.07.415 1.43.53.6.19 1.15.165 1.58.1.48-.07 1.53-.625 1.74-1.23.21-.6.21-1.12.15-1.23-.06-.11-.22-.17-.48-.3z"/>
-                    </svg>
-                    اتصل بنا
+            <div class="flex items-center gap-5 text-slate-400">
+                <span class="hover:text-emerald-400 transition-colors cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">العودة للأعلى ↑</span>
+                <span class="text-slate-800">|</span>
+                <a href="https://wa.me/9647744005595" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-400 transition-colors flex items-center gap-1.5 font-bold">
+                    واتساب الحجوزات: 07744005595
                 </a>
             </div>
         </div>
     </footer>
 
-    <!-- Custom Script Logic -->
+    <!-- Application Logic Script -->
     <script src="app.js"></script>
 </body>
 </html>
