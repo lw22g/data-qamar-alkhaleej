@@ -113,6 +113,29 @@
         </div>
     </header>
 
+    <!-- Admin PIN Passcode Lock Screen (Required only for General Dashboard) -->
+    <div id="pin-lock-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 md:p-8 max-w-sm w-full shadow-2xl border border-slate-100 text-center flex flex-col items-center gap-4">
+            <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-800 flex items-center justify-center border border-emerald-100 shadow-inner">
+                <svg class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+            </div>
+            <div>
+                <h3 class="text-lg font-black text-slate-900">لوحة إدارة العروض العامة</h3>
+                <p class="text-xs text-slate-500 mt-1">يرجى إدخال رمز المرور للوصول إلى كافة الوجهات</p>
+            </div>
+            <form onsubmit="handlePinSubmit(event)" class="w-full flex flex-col gap-3">
+                <input type="password" id="pin-input" maxlength="10" placeholder="••••" 
+                    class="w-full text-center text-2xl tracking-[0.4em] font-black py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:border-emerald-600 focus:bg-white transition-all text-slate-800" autofocus>
+                <p id="pin-error" class="hidden text-xs font-bold text-rose-600">رمز المرور غير صحيح، يرجى المحاولة مجدداً.</p>
+                <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-brand-900 to-brand-800 hover:from-brand-950 hover:to-brand-900 text-white font-black text-sm rounded-2xl shadow-md transition-all">
+                    دخول اللوحة
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- Main Content Section -->
     <main class="w-[94%] max-w-7xl mx-auto py-6 flex-1 flex flex-col">
         

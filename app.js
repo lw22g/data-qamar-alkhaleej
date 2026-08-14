@@ -121,6 +121,8 @@ function findMatchingSheet(query, sheets) {
     return null;
 }
 
+const ADMIN_PIN = "1111";
+
 /**
  * Initializes data model and setup UI
  */
@@ -145,10 +147,13 @@ function initializeWithData(data) {
         }
 
         const matchedSheet = findMatchingSheet(rawDest, allSheets);
+        const pinModal = document.getElementById('pin-lock-modal');
         
         let visibleSheets = allSheets;
-        // If a specific destination was requested in URL, isolate ONLY that destination
+        // 1. If a specific destination was requested in URL -> NO PIN REQUIRED! Open directly for client.
         if (matchedSheet) {
+            if (pinModal) pinModal.classList.add('hidden');
+            
             currentSheet = matchedSheet;
             visibleSheets = [matchedSheet]; // Only show this single country!
             
@@ -163,15 +168,57 @@ function initializeWithData(data) {
                 singleBanner.classList.remove('hidden');
                 if (singleDestName) singleDestName.innerText = currentSheet;
             }
+
+            applyFiltersAndRender();
         } else {
+            // 2. General Dashboard URL -> Requires PIN (1111)
+            const isAuth = sessionStorage.getItem('qamar_admin_auth') === '1';
+            
+            if (!isAuth) {
+                if (pinModal) pinModal.classList.remove('hidden');
+                const pinInput = document.getElementById('pin-input');
+                if (pinInput) setTimeout(() => pinInput.focus(), 150);
+                return; // Stop rendering until authorized
+            }
+
+            if (pinModal) pinModal.classList.add('hidden');
             currentSheet = allSheets[0];
             renderTabs(visibleSheets);
+            applyFiltersAndRender();
         }
-
-        applyFiltersAndRender();
     } else {
         const noData = document.getElementById('no-data-state');
         if (noData) noData.classList.remove('hidden');
+    }
+}
+
+/**
+ * Handles PIN submission on general dashboard
+ */
+function handlePinSubmit(event) {
+    if (event) event.preventDefault();
+    const pinInput = document.getElementById('pin-input');
+    const pinError = document.getElementById('pin-error');
+    const pinModal = document.getElementById('pin-lock-modal');
+
+    if (!pinInput) return;
+
+    if (pinInput.value.trim() === ADMIN_PIN) {
+        sessionStorage.setItem('qamar_admin_auth', '1');
+        if (pinError) pinError.classList.add('hidden');
+        if (pinModal) pinModal.classList.add('hidden');
+
+        // Render full dashboard
+        const allSheets = Object.keys(allData);
+        if (allSheets.length > 0) {
+            currentSheet = allSheets[0];
+            renderTabs(allSheets);
+            applyFiltersAndRender();
+        }
+    } else {
+        if (pinError) pinError.classList.remove('hidden');
+        pinInput.value = '';
+        pinInput.focus();
     }
 }
 
@@ -814,17 +861,19 @@ function copyOfferDetails(encodedText) {
 function copyCurrentDestinationLink() {
     try {
         const url = new URL(window.location.href);
+        url.search = '';
+        url.hash = '';
         url.searchParams.set('dest', currentSheet);
         const link = url.toString();
         
         navigator.clipboard.writeText(link).then(() => {
-            showToast(`تم نسخ رابط عروض (${currentSheet}) بنجاح! يمكنك إرساله للزبون مباشرة.`);
+            showToast(`تم نسخ رابط عروض (${currentSheet}) بنجاح! الرابط جاهز للإرسال للزبون مباشرة وبدون رمز.`);
         }).catch(err => {
             prompt("انسخ الرابط التالي:", link);
         });
     } catch (e) {
-        const hashLink = window.location.href.split('#')[0] + '#' + encodeURIComponent(currentSheet);
-        navigator.clipboard.writeText(hashLink).then(() => {
+        const cleanLink = window.location.href.split('?')[0].split('#')[0] + '?dest=' + encodeURIComponent(currentSheet);
+        navigator.clipboard.writeText(cleanLink).then(() => {
             showToast(`تم نسخ رابط عروض (${currentSheet}) بنجاح!`);
         });
     }
